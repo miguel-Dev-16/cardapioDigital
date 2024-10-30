@@ -6,7 +6,7 @@
 
 **Tela de Home:**
 
-![mock-1](mock-1.png)
+![mock-1](imagens/mock-1.png)
 
 
 
@@ -32,7 +32,7 @@
 
 **Tela de Cardapio Digital Formulário:**
 
-![formulario](formulario.png)
+![formulario](imagens/formulario.png)
 
 ​	**RN009** -> "**Botão Cadastrar**"  quando clicar no botão adicionar, o sistema vai salvar os valores dos campos, (menu, nome, preço, link da imagem, descrição).
 
@@ -54,7 +54,7 @@
 
 **Tela Modal-visualizar:**
 
-![modal-visualizar](modal-visualizar.png)
+![modal-visualizar](imagens/modal-visualizar.png)
 
 
 
@@ -62,7 +62,7 @@
 
 **Tela botão Editar:**
 
-![modal-edite](modal-edite.png)
+![modal-edite](imagens/modal-edite.png)
 
 
 
