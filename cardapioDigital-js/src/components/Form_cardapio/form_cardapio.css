@@ -1,0 +1,22 @@
+.foto{
+   width: 150px;
+   height: 150px;
+   background-color: #ccc;
+   margin: 0 auto; 
+}
+
+.foto-dimensao {
+    width: 150px;
+    height: 150px;
+    margin-right: 25px;
+    color: #FFF;
+}
+
+.centralizado{
+   margin: 0 auto;
+}
+
+/*por enquanto este estilo do h1*/
+h1{
+    text-align: center;
+}
