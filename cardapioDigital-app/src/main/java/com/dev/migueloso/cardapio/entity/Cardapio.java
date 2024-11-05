@@ -23,7 +23,12 @@ public class Cardapio {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
  	private Long codigo;
 	
- 	private MenuEnum menu;
+//	@Enumerated(EnumType.STRING)
+//	@Column(name="menu", nullable = false)
+// 	private MenuEnum menu;
+	
+	@Column(name="menu", nullable = false)
+	private String menu;
  	
  	@Column(nullable = false)
 	private Double preco;
@@ -34,8 +39,10 @@ public class Cardapio {
  	@Column(nullable = false)
 	private String descricao;
  	
- 	@Column(nullable = false)
+ 	@Column(nullable = false, columnDefinition="TEXT")
 	private String imagem;
 	
-	
+ 	public void setMenu(MenuEnum menu) {
+ 		this.menu = menu.getTipoMenu();
+ 	}
 }
