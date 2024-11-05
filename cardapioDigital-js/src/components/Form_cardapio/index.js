@@ -1,15 +1,37 @@
 import { useState } from 'react';
 import './form_cardapio.css';
+import axios from 'axios';
 
 
 function Form_cardapio(){
+    //atributos para cadastro
     const [linkImagem, setLinkImagem] = useState();
-    const [opcaoMenuForm, setOpcaoMenuForm] = useState("Menu");
+    const [nomeForm, setNomeForm] = useState();
+    const [menu, setMenu] = useState();
+    const [descricao, setDescricao] = useState();
     
-    function exibir(e){
-       e.preventDefault();
-       alert("a seleção é: " + opcaoMenuForm);
+    //atributos para consultas
+    const [pesquisa, setPesquisa] = useState();
+
+    
+    function cadastrarCardapio(){
+        const cardapio = {
+            nome:nomeForm,
+            menu:menu,
+            descricao:descricao,
+            imagem:linkImagem,
+            preco:25
+        }
+        
+        axios.post("http://localhost:8080/cardapio", cardapio)
+        .then((response)=>{
+            console.log(response.data)
+        }).catch((erro)=>{
+            console.log(erro);
+        })
+
     }
+    
 
     return(
         <>
@@ -18,30 +40,40 @@ function Form_cardapio(){
                 <div>
                     <h1 className='centralizado mt-2'>Cadastro do Cardápio</h1>
                 </div>
-                <form className=''>
+                <form className='' onSubmit={cadastrarCardapio}>
                     <div className="mb-3 col-6 centralizado mt-3">
-                            <label htmlFor="nome" className="nome">Nome:</label>
-                            <input type="text" className="form-control" id="nome" />
+                            <label htmlFor="nome_form" className="">Nome:</label>
+                            <input 
+                            type="text" 
+                            className="form-control" 
+                            id="nome_form"
+                            onChange={(e)=>setNomeForm(e.target.value)}
+                             />
                     </div>
 
                     <div className="col-6 centralizado">
-                            <select className="form-select form-select-sm mb-3 " aria-label="menu">
-                                    <option value="Menu">Menu</option>
-                                    <option value="Almoço">Almoço</option>
-                                    <option value="Sobremesa">Sobremesa</option>
-                                    <option value="Lanche">Lanche</option>
+                            <select className="form-select form-select-sm mb-3 " 
+                            aria-label="menu_form"
+                            onChange={(opcao)=> setMenu(opcao.target.value)}
+                            >
+                                    <option value="Selecione">Menu</option>
+                                    <option value="ALMOCO">Almoço</option>
+                                    <option value="SOBREMESA">Sobremesa</option>
+                                    <option value="LANCHE">Lanche</option>
                             </select>
                     </div>
                     
                     <div className="form-floating mb-3 col-6 centralizado">
-                        <textarea className="form-control" placeholder="Leave a comment here" id="floatingTextarea"></textarea>
+                        <textarea className="form-control" placeholder="Leave a comment here" id="floatingTextarea"
+                        onChange={(texto) => setDescricao(texto.target.value)}
+                        ></textarea>
                         <label htmlFor="floatingTextarea">Descrição:</label>
                     </div> {/* */}
                      
                     <div className="">
                         <div className="mb-3 col-6 centralizado">
-                                <label htmlFor="nome" className="nome">Link da imagem:</label>
-                                <input type="text" className="form-control" id="nome"
+                                <label htmlFor="imagem" className="nome">Link da imagem:</label>
+                                <input type="text" className="form-control" id="imagem"
                                 onChange={(e)=> setLinkImagem(e.target.value)} />
                         </div>
                         <div className="col-6 centralizado">
@@ -51,7 +83,7 @@ function Form_cardapio(){
                         </div>  
                     </div>
                     <div className='col-6 centralizado'>
-                         <button type="button" className="btn btn-success mt-3 mb-2 w-100">
+                         <button type="submit" className="btn btn-success mt-3 mb-2 w-100">
                             Salvar
                          </button>
                     </div>
@@ -60,24 +92,23 @@ function Form_cardapio(){
 
             {/*formulário pesquisa*/}
            <div className='container'>
-                <form className='row card p-2' onSubmit={exibir}>
+                <form className='row card p-2'>
                     <div className='d-flex gap-2 justify-content-center'>
 
                         <div className="col-2">
-                            <label htmlFor="codigo" className="">Código:</label>
-                            <input type="text" className="form-control" id="codigo" />
+                            <label htmlFor="codigo_pesquisa" className="">Código:</label>
+                            <input type="text" className="form-control" id="codigo_pesquisa" />
                         </div>
 
                         <div className='col-5 mt-4'>
                             <select className="form-select" 
-                            aria-label="menu" 
-                            name='menu' 
-                            value={opcaoMenuForm}
-                            onChange={(texto) => setOpcaoMenuForm(texto.target.value)} >
+                            aria-label="menu_pesquisa" 
+                            name='' 
+                            onChange={(texto) => setPesquisa(texto.target.value)} >
                                 <option value="Menu">Selecione</option>
-                                <option value="Almoço">Almoço</option>
-                                <option value="Sobremesa">Sobremesa</option>
-                                <option value="Lanche">Lanche</option>
+                                <option value="ALMOCO">Almoço</option>
+                                <option value="SOBREMESA">Sobremesa</option>
+                                <option value="LANCHE">Lanche</option>
                             </select>
                         </div>
 
