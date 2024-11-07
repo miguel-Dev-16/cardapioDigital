@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './form_cardapio.css';
 import axios from 'axios';
 
@@ -12,8 +12,21 @@ function Form_cardapio(){
     
     //atributos para consultas
     const [pesquisa, setPesquisa] = useState();
-
     
+    //api da url do sistema cardapio
+    const [pagina,setPagina] = useState(2);
+    const [dados,setDados] = useState([]);
+    const registro = 5;
+    const url = `http://localhost:8080/cardapio?pagina=${pagina}&registros=${registro}`;
+    
+    useEffect(()=>{
+        axios.get(url).then((response)=>{
+          setDados(response.data);
+        })
+    },[]);
+
+ 
+
     function cadastrarCardapio(){
         const cardapio = {
             nome:nomeForm,
@@ -32,6 +45,7 @@ function Form_cardapio(){
 
     }
     
+
 
     return(
         <>
@@ -120,7 +134,7 @@ function Form_cardapio(){
                     </div>            
                 </form>
            </div>
-
+          {/*tabela de exibição dos dados*/}
            <div className='container mt-2'>
                <table className="table">
                     <thead>
@@ -132,18 +146,15 @@ function Form_cardapio(){
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                        <th scope="row">1</th>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
+                      {dados.map((item)=>(
+                        <tr key={item.codigo}>
+                        <td>{item.codigo}</td>
+                        <td>{item.nome}</td>
+                        <td>{item.menu}</td>
                         </tr>
-                        <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        </tr>
+
+                      ))}
+                       
                     </tbody>
                 </table>
            </div>
