@@ -38,4 +38,10 @@ public class CardapioController {
 	  return ResponseEntity.ok().body(service.listarCardapio(pagina, registros));
 	}
 	
+	@CrossOrigin(origins="*", allowedHeaders = "*")
+	@GetMapping("/qtd_registros")
+	public ResponseEntity<Integer> quantidadeRegistros(){
+		return ResponseEntity.ok().body(service.qtdRegistro());
+	}
+	
 }

@@ -12,5 +12,5 @@ public interface CardapioRepository extends CrudRepository<Cardapio, Long>{
   //não sei pq mais procurar verificar pois da erro quando coloco a interface JpaRepository para se 
   //trabalhar com o Pageable, por isso coloquei o CrudRepository. verificar a diferença dos dois.
    List<Cardapio> findAll(Pageable pagina);
-
+   
 }

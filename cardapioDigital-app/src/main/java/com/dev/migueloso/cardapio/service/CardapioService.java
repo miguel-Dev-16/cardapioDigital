@@ -31,4 +31,12 @@ public class CardapioService {
 		return repository.findAll(PageRequest.of(pagina, registros));
 	}
 	
+	//retorna o total de registros do cardapio
+	public Integer qtdRegistro() {
+	     List<Cardapio> registros = (List<Cardapio>) repository.findAll();
+	     Integer qtd_registros = registros.size();
+	     return qtd_registros;
+	}
+	
+	
 }

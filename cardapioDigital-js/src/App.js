@@ -3,11 +3,10 @@ import axios from 'axios';
 import './App.css';
 import Form_cardapio from './components/Form_cardapio';
 
-function App() {
-   
+function App() { 
   return (
     <>
-       <Form_cardapio />
+      <Form_cardapio />
     </>
   );
 }

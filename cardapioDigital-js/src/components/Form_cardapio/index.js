@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import './form_cardapio.css';
 import axios from 'axios';
 
-
 function Form_cardapio(){
     //atributos para cadastro
     const [linkImagem, setLinkImagem] = useState();
@@ -14,19 +13,43 @@ function Form_cardapio(){
     const [pesquisa, setPesquisa] = useState();
     
     //api da url do sistema cardapio
-    const [pagina,setPagina] = useState(2);
+    const [pagina,setPagina] = useState(1);
+    
     const [dados,setDados] = useState([]);
+    const [numerRegistro,setNumeroRegistro] = useState();
     const registro = 5;
     const url = `http://localhost:8080/cardapio?pagina=${pagina}&registros=${registro}`;
-    
+    const qtd_registros = 'http://localhost:8080/cardapio/qtd_registros';
+
     useEffect(()=>{
         axios.get(url).then((response)=>{
           setDados(response.data);
         })
-    },[]);
 
- 
+        axios.get(qtd_registros).then((response)=>{
+            setNumeroRegistro(response.data);
+        })
+    },[pagina,registro]);
 
+    // useEffect(()=>{
+    //     const fetchData = async () =>{
+    //         try{
+    //             const response = await axios.get(url);
+    //             const res = await axios.get(qtd_registros);
+    //             setDados(response.data);
+    //             setNumeroRegistro(res.data);
+    //         }catch(error){
+    //             console.log('o erro é ' + error);
+    //         }
+
+    //     }
+    //     fetchData();
+    // },[pagina, registro]); outra opção de código.
+    
+    const reload = ()=>{
+        window.location.reload();
+    }
+   
     function cadastrarCardapio(){
         const cardapio = {
             nome:nomeForm,
@@ -38,21 +61,39 @@ function Form_cardapio(){
         
         axios.post("http://localhost:8080/cardapio", cardapio)
         .then((response)=>{
-            console.log(response.data)
+            // console.log(response.data)
         }).catch((erro)=>{
             console.log(erro);
-        })
+        });
+
+        registro();
 
     }
     
+    //atributos paginação e métodos paginação
+    const itensPorPagina = registro;
+    const totalItens = numerRegistro;
+    const totalPaginas = Math.ceil(totalItens / itensPorPagina);
 
+    const proximo = ()=>{
+        if(pagina < totalPaginas){
+            setPagina(pagina + 1);
+        }
+    };
+   
+
+    const anterior = ()=>{
+        if(pagina > 1){
+            setPagina(pagina - 1);
+        }
+    };
 
     return(
         <>
            {/*formulário cadastro*/}
            <div className="container">
                 <div>
-                    <h1 className='centralizado mt-2'>Cadastro do Cardápio</h1>
+                    <h1 className='centralizado mt-2'>Gestão Cardápio</h1>
                 </div>
                 <form className='' onSubmit={cadastrarCardapio}>
                     <div className="mb-3 col-6 centralizado mt-3">
@@ -134,6 +175,7 @@ function Form_cardapio(){
                     </div>            
                 </form>
            </div>
+
           {/*tabela de exibição dos dados*/}
            <div className='container mt-2'>
                <table className="table">
@@ -157,6 +199,24 @@ function Form_cardapio(){
                        
                     </tbody>
                 </table>
+
+            {/*-----------paginação --------*/}
+                <nav aria-label="Page navigation example" className='container w-25'>
+                    <ul className="pagination gap-3">
+                        <li className="page-item">
+                        <button className="btn btn-primary" onClick={anterior}
+                        disabled={pagina === 1}>anterior</button>
+                        </li>
+                        <li className="page-item"><a className="page-link">{pagina}</a></li>
+                        
+
+                        <li className="page-item">
+                            <button className="btn btn-primary" onClick={proximo}
+                            disabled={pagina === totalPaginas}>próximo</button>
+                        </li>
+                    </ul>
+                </nav>
+            
            </div>
 
         </>
