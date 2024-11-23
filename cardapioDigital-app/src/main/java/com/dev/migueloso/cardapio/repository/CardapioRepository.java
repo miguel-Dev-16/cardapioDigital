@@ -13,4 +13,5 @@ public interface CardapioRepository extends CrudRepository<Cardapio, Long>{
   //trabalhar com o Pageable, por isso coloquei o CrudRepository. verificar a diferença dos dois.
    List<Cardapio> findAll(Pageable pagina);
    
+   List<Cardapio> findByMenuLike(String menu);
 }

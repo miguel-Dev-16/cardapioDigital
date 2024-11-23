@@ -1,42 +1,40 @@
 import { useState } from "react";
 
-function Paginacao({registro}){
-    const [paginaAtual,setPaginaAtual] = useState(1);
-    const itensPorPagina = 5;
-    const totalItens = registro;
+function Paginacao({registro,numerRegistro,pagina,setPagina}){
+    const itensPorPagina = registro;
+    const totalItens = numerRegistro;
     const totalPaginas = Math.ceil(totalItens / itensPorPagina);
     
     const proximo = ()=>{
-        if(paginaAtual < totalPaginas){
-            setPaginaAtual(paginaAtual +1);
+        if(pagina < totalPaginas){
+            setPagina(pagina +1);
         }
     };
 
     const anterior = ()=>{
-        if(paginaAtual > 1){
-            setPaginaAtual(paginaAtual - 1);
+        if(pagina > 1){
+            setPagina(pagina - 1);
         }
     };
 
 
 return(
 <>
-<nav aria-label="Page navigation example">
+<nav aria-label="Page navigation example" className='container w-25'>
     <ul className="pagination gap-3">
         <li className="page-item">
         <button className="btn btn-primary" onClick={anterior}
-        disabled={paginaAtual === 1}>anterior</button>
+        disabled={pagina === 1}>anterior</button>
         </li>
-        <li className="page-item"><a className="page-link" href="#">{paginaAtual}</a></li>
+        <li className="page-item"><a className="page-link">{pagina}</a></li>
         
-
         <li className="page-item">
             <button className="btn btn-primary" onClick={proximo}
-            disabled={paginaAtual === totalPaginas}>próximo</button>
+            disabled={pagina === totalPaginas}>próximo</button>
         </li>
     </ul>
 </nav>
 </>
-    );
+ );
 }
 export default Paginacao;

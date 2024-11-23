@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import './form_cardapio.css';
 import axios from 'axios';
+import Tabela from '../Tabela';
+import Paginacao from '../Paginacao';
 
 function Form_cardapio(){
     //atributos para cadastro
@@ -8,20 +10,27 @@ function Form_cardapio(){
     const [nomeForm, setNomeForm] = useState();
     const [menu, setMenu] = useState();
     const [descricao, setDescricao] = useState();
+    const [preco, setPreco] = useState();
     
     //atributos para consultas
     const [pesquisa, setPesquisa] = useState();
     
-    //api da url do sistema cardapio
+    //atributos para a páginação do sistema
     const [pagina,setPagina] = useState(1);
-    
-    const [dados,setDados] = useState([]);
-    const [numerRegistro,setNumeroRegistro] = useState();
+
+    //numero de registros vindo da api
     const registro = 5;
+    const [numerRegistro, setNumeroRegistro] = useState();
+
+    //array de dados
+    const [dados, setDados] = useState([]);
+
+    //dados api
     const url = `http://localhost:8080/cardapio?pagina=${pagina}&registros=${registro}`;
     const qtd_registros = 'http://localhost:8080/cardapio/qtd_registros';
 
-    useEffect(()=>{
+    //user eEffect carregando os dados.
+    useEffect(()=>{        
         axios.get(url).then((response)=>{
           setDados(response.data);
         })
@@ -31,32 +40,21 @@ function Form_cardapio(){
         })
     },[pagina,registro]);
 
-    // useEffect(()=>{
-    //     const fetchData = async () =>{
-    //         try{
-    //             const response = await axios.get(url);
-    //             const res = await axios.get(qtd_registros);
-    //             setDados(response.data);
-    //             setNumeroRegistro(res.data);
-    //         }catch(error){
-    //             console.log('o erro é ' + error);
-    //         }
+    // Métodos:
 
-    //     }
-    //     fetchData();
-    // },[pagina, registro]); outra opção de código.
-    
+    //método para recarregar a página.
     const reload = ()=>{
         window.location.reload();
     }
-   
+    
+    //método para cadastrar o cardapio
     function cadastrarCardapio(){
         const cardapio = {
             nome:nomeForm,
             menu:menu,
             descricao:descricao,
             imagem:linkImagem,
-            preco:25
+            preco:preco
         }
         
         axios.post("http://localhost:8080/cardapio", cardapio)
@@ -65,29 +63,25 @@ function Form_cardapio(){
         }).catch((erro)=>{
             console.log(erro);
         });
-
-        registro();
-
     }
     
-    //atributos paginação e métodos paginação
-    const itensPorPagina = registro;
-    const totalItens = numerRegistro;
-    const totalPaginas = Math.ceil(totalItens / itensPorPagina);
-
-    const proximo = ()=>{
-        if(pagina < totalPaginas){
-            setPagina(pagina + 1);
-        }
-    };
-   
-
-    const anterior = ()=>{
-        if(pagina > 1){
-            setPagina(pagina - 1);
-        }
-    };
-
+    //método para converter o valor de (,) para (.)  
+     const convertPreco = (e)=>{
+         const valorConvertido = e.target.value.replace(',','.');
+         setPreco(valorConvertido); 
+     }
+    
+     //  método para deletar cardapio
+     function deletarCadapio(codigo){
+        axios.delete(`http://localhost:8080/cardapio/${codigo}`)
+        .then((response)=>{
+            console.log(response);
+        }).catch((error)=>{
+            console.log(error);
+        })
+        //reload();
+     }
+         
     return(
         <>
            {/*formulário cadastro*/}
@@ -116,6 +110,16 @@ function Form_cardapio(){
                                     <option value="SOBREMESA">Sobremesa</option>
                                     <option value="LANCHE">Lanche</option>
                             </select>
+                    </div>
+
+                    <div className="mb-3 col-6 centralizado mt-3">
+                            <label htmlFor="preco" className="">Preço:</label>
+                            <input 
+                            type="text" 
+                            className="form-control" 
+                            id="preco"
+                            onChange={convertPreco}
+                             />
                     </div>
                     
                     <div className="form-floating mb-3 col-6 centralizado">
@@ -176,47 +180,21 @@ function Form_cardapio(){
                 </form>
            </div>
 
-          {/*tabela de exibição dos dados*/}
+            {/*tabela de exibição dos dados*/}
            <div className='container mt-2'>
-               <table className="table">
-                    <thead>
-                        <tr>
-                        <th scope="col">Código</th>
-                        <th scope="col">Nome</th>
-                        <th scope="col">Menu</th>
-                        <th scope="col">Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                      {dados.map((item)=>(
-                        <tr key={item.codigo}>
-                        <td>{item.codigo}</td>
-                        <td>{item.nome}</td>
-                        <td>{item.menu}</td>
-                        </tr>
-
-                      ))}
-                       
-                    </tbody>
-                </table>
+               <Tabela 
+                 pagina={pagina}
+                 dados={dados}
+                 deletar={deletarCadapio}
+               />
 
             {/*-----------paginação --------*/}
-                <nav aria-label="Page navigation example" className='container w-25'>
-                    <ul className="pagination gap-3">
-                        <li className="page-item">
-                        <button className="btn btn-primary" onClick={anterior}
-                        disabled={pagina === 1}>anterior</button>
-                        </li>
-                        <li className="page-item"><a className="page-link">{pagina}</a></li>
-                        
-
-                        <li className="page-item">
-                            <button className="btn btn-primary" onClick={proximo}
-                            disabled={pagina === totalPaginas}>próximo</button>
-                        </li>
-                    </ul>
-                </nav>
-            
+              <Paginacao 
+                registro={registro}
+                numerRegistro={numerRegistro}
+                pagina={pagina}
+                setPagina={setPagina}
+              /> 
            </div>
 
         </>

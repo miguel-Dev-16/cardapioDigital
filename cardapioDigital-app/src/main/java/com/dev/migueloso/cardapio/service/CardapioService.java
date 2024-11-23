@@ -38,5 +38,26 @@ public class CardapioService {
 	     return qtd_registros;
 	}
 	
+	public void deletar(Long codigo) {
+	   Cardapio obj = repository.findById(codigo).get();
+	   
+	   if(Objects.isNull(obj)) {
+        throw new IllegalArgumentException("Cardapio não existe na base de dados!");		   
+	   }
+	   
+	   repository.deleteById(codigo);
+	}
+	
+	public void atualizar(Cardapio obj) {
+		if(Objects.isNull(obj)) {
+			throw new IllegalArgumentException("Os dados informados vazio!");
+		}
+		repository.save(obj);
+	}
+	
+	public List<Cardapio> buscarCardapioPorMenu(String menu) {
+	  return repository.findByMenuLike(menu);
+	}
+	
 	
 }
