@@ -20,6 +20,7 @@ public class CardapioDto {
 	private String imagem;
 	
 	public CardapioDto(Cardapio entidade) {
+		setCodigo(entidade.getCodigo());
 		setMenu(entidade.getMenu());
 		setPreco(entidade.getPreco());
 		setNome(entidade.getNome());

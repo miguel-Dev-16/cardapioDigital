@@ -1,6 +1,7 @@
 package com.dev.migueloso.cardapio.controller;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -54,13 +56,37 @@ public class CardapioController {
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 	
-	// testar amanhã
+	// testado e aprovado.
 	@CrossOrigin(origins="*", allowedHeaders = "*")
 	@GetMapping("/listaMenu")
 	public ResponseEntity<List<Cardapio>> listarPorMenu(@RequestParam String menu){
 		return ResponseEntity.status(HttpStatus.OK).body(service.buscarCardapioPorMenu(menu));
 	}
 	
+	
+	@CrossOrigin(origins="*", allowedHeaders="*")
+	@GetMapping("/consultar/{codigo}")
+	public ResponseEntity<Cardapio> buscarPorId(@PathVariable Long codigo){
+		return ResponseEntity.status(HttpStatus.OK).body(service.buscarPorId(codigo));
+	}
+	
+	@CrossOrigin(origins="*", allowedHeaders="*")
+	@PutMapping("/atualizar")
+	public ResponseEntity<Cardapio> atualiza(@RequestBody Cardapio cardapio){
+		if(Objects.isNull(cardapio)) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+		
+		return ResponseEntity.ok().body(service.cadastrar(cardapio));
+	}
+	
+	@CrossOrigin(origins="*", allowedHeaders="*")
+	@GetMapping("/listarporMenu")
+	public ResponseEntity<List<Cardapio>> buscarPorMenuPaginado(@RequestParam String menu,@RequestParam int pagina,
+			@RequestParam int registros){
+		pagina = (pagina - 1);
+		return ResponseEntity.ok().body(service.buscaPorMenuPaginado(menu, pagina, registros));
+	}
 	
 	
 }

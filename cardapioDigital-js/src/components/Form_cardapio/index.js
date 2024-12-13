@@ -10,20 +10,30 @@ function Form_cardapio(){
     const [nomeForm, setNomeForm] = useState();
     const [menu, setMenu] = useState();
     const [descricao, setDescricao] = useState();
-    const [preco, setPreco] = useState();
+    const [preco, setPreco] = useState(); 
     
-    //atributos para consultas
+    //atributos para consultas e metodo de pesquisa por menu
     const [pesquisa, setPesquisa] = useState();
+
+        //atributos para a páginação do sistema
+        const [pagina,setPagina] = useState(1);
+
+        //numero de registros vindo da api
+        const registro = 5;
+        const [numerRegistro, setNumeroRegistro] = useState();
     
-    //atributos para a páginação do sistema
-    const [pagina,setPagina] = useState(1);
+        //array de dados
+        const [dados, setDados] = useState([]);
+    
+    const pesquisaPorMenu = ()=>{
+        const url = `http://localhost:8080/cardapio/listarporMenu?menu=${pesquisa}&pagina=${pagina}&registros=${registro}`;
+        axios.get(url).then((response)=>{
+            setDados(response.data);
+        }).catch((error)=>{
+            console.log(error);
+        })
+    }
 
-    //numero de registros vindo da api
-    const registro = 5;
-    const [numerRegistro, setNumeroRegistro] = useState();
-
-    //array de dados
-    const [dados, setDados] = useState([]);
 
     //dados api
     const url = `http://localhost:8080/cardapio?pagina=${pagina}&registros=${registro}`;
@@ -75,7 +85,6 @@ function Form_cardapio(){
      function deletarCadapio(codigo){
         axios.delete(`http://localhost:8080/cardapio/${codigo}`)
         .then((response)=>{
-            console.log(response);
         }).catch((error)=>{
             console.log(error);
         })
@@ -143,7 +152,7 @@ function Form_cardapio(){
                     </div>
                     <div className='col-6 centralizado'>
                          <button type="submit" className="btn btn-success mt-3 mb-2 w-100">
-                            Salvar
+                            Cadastrar
                          </button>
                     </div>
                 </form>
@@ -165,14 +174,14 @@ function Form_cardapio(){
                             name='' 
                             onChange={(texto) => setPesquisa(texto.target.value)} >
                                 <option value="Menu">Selecione</option>
-                                <option value="ALMOCO">Almoço</option>
-                                <option value="SOBREMESA">Sobremesa</option>
-                                <option value="LANCHE">Lanche</option>
+                                <option value="Almoço">Almoço</option>
+                                <option value="Sobremesa">Sobremesa</option>
+                                <option value="Lanche">Lanche</option>
                             </select>
                         </div>
 
                         <div className='col-3 mt-4'>
-                            <button type="submit" className="btn btn-primary w-100">
+                            <button type="button" className="btn btn-primary w-100" onClick={pesquisaPorMenu}>
                                 Buscar
                             </button>
                         </div>
@@ -189,7 +198,7 @@ function Form_cardapio(){
                />
 
             {/*-----------paginação --------*/}
-              <Paginacao 
+              <Paginacao
                 registro={registro}
                 numerRegistro={numerRegistro}
                 pagina={pagina}
