@@ -79,3 +79,8 @@
 |     nome      |    VARCHAR    |    -    |        SIM        |    SIM    |   SIM    |
 |   descrição   |     TEXT      |    -    |        SIM        |     -     |   SIM    |
 
+**Video inicial do sistema:**
+
+<a href="https://www.youtube.com/watch?v=CzEdrT1UvWs&t=491s" target="_blank">
+   <img src="imagens/formulario.png" alt="Texto alternativo" style="width:300px;"/>
+</a>
